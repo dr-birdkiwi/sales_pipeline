@@ -4,9 +4,9 @@ import pathlib
 import pendulum
 from airflow.decorators import dag, task
 from airflow.providers.postgres.operators.postgres import PostgresOperator
-from sales_pipeline.tasks.extract_load import (add_store_country_city,
-                                              retrieve_users, retrieve_weather,
-                                              truncate_load)
+from sales_pipeline.tasks.extract_load import (add_store_country_city, insert_only,
+                                               retrieve_users, retrieve_weather,
+                                               truncate_load)
 
 
 @dag(
@@ -43,11 +43,7 @@ def sales_pipeline():
         cur_dir = pathlib.Path(__file__).parent.resolve()
         sink_file = cur_dir / 'data/weather.csv'
         retrieve_weather(sink_file)
-        truncate_load('stg_weather', sink_file)
-
-    def transform():
-        # dbt job
-        pass
+        insert_only('stg_weather', sink_file)
 
     db_init = PostgresOperator(
         task_id="db_init",
@@ -55,7 +51,13 @@ def sales_pipeline():
         sql="sql/ddl.sql",
     )
 
-    db_init >> el_sales() >> el_users() >> el_weather()
+    db_transform = PostgresOperator(
+        task_id="db_transform",
+        postgres_conn_id="postgres_default",
+        sql="sql/transformation.sql",
+    )
+
+    db_init >> el_sales() >> el_users() >> el_weather() >> db_transform
 
 
 sales_pipeline()
