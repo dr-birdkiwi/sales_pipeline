@@ -4,7 +4,7 @@ import pathlib
 import pendulum
 from airflow.decorators import dag, task
 from airflow.providers.postgres.operators.postgres import PostgresOperator
-from data_pipeline.tasks.extract_load import (add_store_country_city,
+from sales_pipeline.tasks.extract_load import (add_store_country_city,
                                               retrieve_users, retrieve_weather,
                                               truncate_load)
 

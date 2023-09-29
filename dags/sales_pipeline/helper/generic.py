@@ -1,5 +1,5 @@
 from typing import Tuple
-from data_pipeline.helper.constants import STORES
+from sales_pipeline.helper.constants import STORES
 
 
 def get_store_city_country(id: int) -> Tuple[str, str]:

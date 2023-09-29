@@ -4,8 +4,8 @@ import json
 
 import requests
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from data_pipeline.helper.constants import POSTGRES_CONNECTION_ID, STORES
-from data_pipeline.helper.generic import get_store_city_country
+from sales_pipeline.helper.constants import POSTGRES_CONNECTION_ID, STORES
+from sales_pipeline.helper.generic import get_store_city_country
 
 
 def add_store_country_city(source_file, sink_file):
