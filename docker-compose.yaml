@@ -18,6 +18,7 @@ x-airflow-common:
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - logs-volume:/opt/airflow/logs
+    - tmp-volume:/tmp
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -201,3 +202,4 @@ services:
 volumes:
   postgres-db-volume:
   logs-volume:
+  tmp-volume:

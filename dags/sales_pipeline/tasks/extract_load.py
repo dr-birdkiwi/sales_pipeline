@@ -1,6 +1,7 @@
 import csv
 from datetime import datetime
 import json
+import os
 
 import requests
 from airflow.providers.postgres.hooks.postgres import PostgresHook
@@ -76,3 +77,9 @@ def retrieve_weather(sink_file):
                 row = {col: json.dumps(item[col]) if type(item[col]) in [
                     dict, list] else item[col] for col in columns}
                 writer.writerow(row)
+
+
+def remove_file(file_path):
+    if os.path.exists(file_path):
+        # Remove the file
+        os.remove(file_path)

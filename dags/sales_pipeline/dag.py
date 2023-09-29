@@ -1,12 +1,11 @@
 
 import pathlib
-
 import pendulum
 from airflow.decorators import dag, task
 from airflow.providers.postgres.operators.postgres import PostgresOperator
-from sales_pipeline.tasks.extract_load import (add_store_country_city, insert_only,
-                                               retrieve_users, retrieve_weather,
-                                               truncate_load)
+from sales_pipeline.tasks.extract_load import (add_store_country_city,
+                                               insert_only, remove_file, retrieve_users,
+                                               retrieve_weather, truncate_load)
 
 
 @dag(
@@ -25,25 +24,25 @@ def sales_pipeline():
 
     @task
     def el_sales():
-        cur_dir = pathlib.Path(__file__).parent.resolve()
-        source_file = cur_dir / 'data/sales_data.csv'
-        sink_file = cur_dir / 'data/sales_data_store.csv'
+        source_file = pathlib.Path(__file__).parent.resolve() / 'data/sales_data.csv'
+        sink_file = '/tmp/sales_data_store.csv'
         add_store_country_city(source_file, sink_file)
         truncate_load('stg_sales', sink_file)
+        remove_file(sink_file)
 
     @task
     def el_users():
-        cur_dir = pathlib.Path(__file__).parent.resolve()
-        sink_file = cur_dir / 'data/users.csv'
+        sink_file = '/tmp/users.csv'
         retrieve_users(sink_file)
         truncate_load('stg_users', sink_file)
+        remove_file(sink_file)
 
     @task
     def el_weather():
-        cur_dir = pathlib.Path(__file__).parent.resolve()
-        sink_file = cur_dir / 'data/weather.csv'
+        sink_file = '/tmp/weather.csv'
         retrieve_weather(sink_file)
         insert_only('stg_weather', sink_file)
+        remove_file(sink_file)
 
     db_init = PostgresOperator(
         task_id="db_init",
