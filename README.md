@@ -33,3 +33,46 @@
  - All the tables are located under the `public` schema
  ![Alt text](pics/posgres_1.png)
 
+## High Level Architecture
+![Alt text](pics/architecture.png)
+
+### Extract & Load
+ - Source data are first extracted and saved as csv files locally
+ - The csv files are then loaded into postgres db. Either truncate & load, or insert only.
+    - `stg_sales`
+    - `stg_users`
+    - `stg_weather`
+ - The staging tables are supposed to match the source.
+
+### Transform
+ - Dedup
+    - `dedup_weather` stores the last record for each city and each day
+ - Merged
+    - `merged_sales` stores all the sales orders along with user information and weather information
+ - Aggregated
+    - `aggr_customer`
+    - `aggr_product`
+    - `aggr_month`
+    - `aggr_year`
+    
+### Dependencies
+Dependencies are defined in the Airflow DAG.
+![Alt text](pics/airflow_3.png)
+
+ - `db_init`: Create all the staging tables
+ - `el_sales`: Extract and load sales csv file to `stg_sales`
+ - `el_users`: Extract and load users API data to `stg_users`
+ - `et_weather`: Extract and load weather API data to `stg_weather`
+ - `db_transform`: Transform staging tables to other tables
+
+
+## Data Models
+
+### Staging
+![Alt text](pics/ERD_staging.png)
+
+### Dedup & Merged
+![Alt text](pics/ERD_dedup_merged.png)
+
+### Aggregated
+![Alt text](pics/ERD_aggr.png)

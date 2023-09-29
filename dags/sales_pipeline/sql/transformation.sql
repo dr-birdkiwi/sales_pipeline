@@ -98,6 +98,7 @@ order by
 --aggr_quarter
 drop table if exists aggr_quarter;
 
+create table aggr_quarter as 
 select
 	date_trunc('quarter',
 	order_date)::date as "quarter",
