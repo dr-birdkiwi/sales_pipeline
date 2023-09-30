@@ -31,7 +31,7 @@
     - username: airflow
     - password: airflow
  - All the tables are located under the `public` schema
- ![Alt text](pics/posgres_1.png)
+![Alt text](pics/posgres_1.png)
 
 ## High Level Architecture
 ![Alt text](pics/architecture.png)
