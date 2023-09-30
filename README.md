@@ -76,3 +76,6 @@ Dependencies are defined in the Airflow DAG.
 
 ### Aggregated
 ![Alt text](pics/ERD_aggr.png)
+
+
+## Code Structure
