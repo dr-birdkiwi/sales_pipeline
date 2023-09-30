@@ -79,3 +79,20 @@ Dependencies are defined in the Airflow DAG.
 
 
 ## Code Structure
+![Alt text](pics/code_structure.png)
+
+ - `dag.py`: The main entrance where all the tasks and their dependencies are defined
+ - `tasks`: The folder to save all the functions used directly by the tasks in `dag.py`
+ - `helper`: All the helper functions to avoid duplicate codes
+ - `data`: Saves the provided `sales_data.csv`
+ - `sql`
+   - `ddl.sql`: All the DDL scripts to create all the required staging tables
+   - `transformation.sql`: All the scripts to create other tables
+
+
+## Analytics
+### How averge price affects sales quantity?
+![Alt text](pics/analytics_1.png)
+
+### Customer Purchase Summary
+![Alt text](pics/analytics_2.png)
